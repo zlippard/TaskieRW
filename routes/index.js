@@ -10,6 +10,8 @@ function factory(controller) {
 
     router.delete('/user', controller.delete)
 
+    router.delete('/user/:id', controller.deleteUser)
+
     return router
 }
 

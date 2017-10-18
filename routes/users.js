@@ -45,6 +45,15 @@ const userController = (model) => {
             })
     }
 
+    controller.deleteUser = (req, res, next) => {
+        model.findById(req.params.id).remove()
+            .then(() => res.sendStatus(200))
+            .catch((error) => {
+                console.log(error)
+                next(error)
+            })
+    }
+
     return controller
 }
 
