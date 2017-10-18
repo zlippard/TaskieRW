@@ -1,0 +1,1 @@
+const databaseUrl = process.env.DB_URL
