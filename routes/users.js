@@ -13,13 +13,39 @@ const userController = (model) => {
             })
     }
 
-    controller.saveUser = (req, res, next) => {
-        const user = new model(req.body)
+    controller.register = (req, res, next) => {
+        model.find({email: req.body.email})
+            .then((user, error) => {
+                if (error) {
+                    throw error
+                }
 
-        user.save()
-            .then(() => res.sendStatus(200))
-            .catch(error => {
+                if (user.length !== 0) { //ak ga ima jebo ga caca
+                    res.sendStatus(401)
+                    next()
+                    throw 401
+                } else {
+                    return new model(req.body).save()
+                }
+            }).then(() => res.send(200))
+            .catch((error) => {
                 console.log(error)
+                next(error)
+            })
+    }
+
+    controller.login = (req, res, next) => {
+        const credentials = {
+            email: req.body.email,
+            password: req.body.password
+        }
+
+        model.findOne(credentials)
+            .then((user) => {
+                res.json(user)
+            })
+            .catch((error) => {
+                res.send(500)
                 next(error)
             })
     }
@@ -37,7 +63,7 @@ const userController = (model) => {
     }
 
     controller.delete = (req, res, next) => {
-        model.find().remove()
+        model.remove()
             .then(() => res.sendStatus(200))
             .catch((error) => {
                 console.log(error)

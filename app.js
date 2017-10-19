@@ -21,7 +21,6 @@ const controller = userController(User(mongoose))
 //application & routing
 const routes = require('./routes/index')(controller) //routes(controller)
 
-
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
 app.use('/api', routes)
@@ -31,7 +30,7 @@ app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'pug')
 
 app.listen(config.port, () => {
-    console.log(config.port)
+    console.log('Server is up m8')
 })
 
 module.exports = app

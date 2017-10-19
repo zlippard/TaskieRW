@@ -1,8 +1,7 @@
 const UserModel = (database) => database.model('User', {
     name: String,
-    lastName: String,
-    weight: Number,
-    height: Number
+    email: String,
+    password: String
 })
 
 module.exports = UserModel

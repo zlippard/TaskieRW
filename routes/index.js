@@ -3,13 +3,12 @@ const router = express.Router()
 
 function factory(controller) {
     router.get('/user', controller.getAll)
-
-    router.post('/user', controller.saveUser)
-
     router.get('/user/:id', controller.getById)
 
-    router.delete('/user', controller.delete)
+    router.post('/user', controller.register)
+    router.post('/login', controller.login)
 
+    router.delete('/user', controller.delete)
     router.delete('/user/:id', controller.deleteUser)
 
     return router
