@@ -13,17 +13,16 @@ mongoose.Promise = global.Promise
 require('./db/index')(mongoose)
 
 //user controller
-const User = require('./db/model/user')
-const userController = require("./routes/users")
+const User = require('./db/model/userSchema')
+const userController = require("./controller/userController")
 
 const controller = userController(User(mongoose))
 
 //application & routing
-const routes = require('./routes/index')(controller) //routes(controller)
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
-app.use('/api', routes)
+require('./routes/index')(app, {userController: controller}) //routes(controller)
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))

@@ -1,51 +1,72 @@
+const passwordUtils = require('../utils/passwordUtils')
+const errorUtils = require('../utils/errorUtils')
+
 const userController = (model) => {
     const controller = {}
 
     controller.getAll = (req, res, next) => {
         model.find()
             .then((users) => {
-                console.log(users)
                 res.json(users)
             })
             .catch((error) => {
-                console.log(error)
                 next(error)
             })
     }
 
     controller.register = (req, res, next) => {
-        model.find({email: req.body.email})
+        model.findOne({email: req.body.email})
             .then((user, error) => {
                 if (error) {
                     throw error
                 }
 
-                if (user.length !== 0) { //ak ga ima jebo ga caca
+                if (user) { //ak ga ima jebo ga caca
                     res.sendStatus(401)
                     next()
                     throw 401
                 } else {
-                    return new model(req.body).save()
+                    const signUpUser = {
+                        name: req.body.name,
+                        email: req.body.email,
+                        passwordHash: passwordUtils.cryptPassword(req.body.password)
+                    }
+
+                    model(signUpUser).save()
+
+                    return { //we trim the rest of the data
+                        name: signUpUser.name,
+                        email: signUpUser.email
+                    }
                 }
-            }).then(() => res.send(200))
-            .catch((error) => {
-                console.log(error)
-                next(error)
-            })
+            }).then(() => {
+            res.status(200)
+            res.json({message: 'Success'})
+        }).catch((error) => {
+            next(error)
+        })
     }
 
     controller.login = (req, res, next) => {
-        const credentials = {
-            email: req.body.email,
-            password: req.body.password
-        }
-
-        model.findOne(credentials)
+        model.findOne({email: req.body.email})
             .then((user) => {
-                res.json(user)
+                if (!user) {
+                    throw errorUtils.unauthorized()
+                }
+
+                console.log(user)
+
+                if (passwordUtils.compareHash(req.body.password, user.passwordHash)) {
+                    res.json({
+                        name: user.name,
+                        email: user.email,
+                        id: user.id
+                    })
+                } else {
+                    throw errorUtils.unauthorized()
+                }
             })
             .catch((error) => {
-                res.send(500)
                 next(error)
             })
     }
@@ -53,11 +74,9 @@ const userController = (model) => {
     controller.getById = (req, res, next) => {
         model.findById(req.params.id)
             .then((user) => {
-                console.log(user)
                 res.json(user)
             })
             .catch((error) => {
-                console.log(error)
                 next(error)
             })
     }
@@ -66,7 +85,6 @@ const userController = (model) => {
         model.remove()
             .then(() => res.sendStatus(200))
             .catch((error) => {
-                console.log(error)
                 next(error)
             })
     }
@@ -75,7 +93,6 @@ const userController = (model) => {
         model.findById(req.params.id).remove()
             .then(() => res.sendStatus(200))
             .catch((error) => {
-                console.log(error)
                 next(error)
             })
     }
