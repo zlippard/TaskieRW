@@ -7,6 +7,6 @@ const UserSchema = new Schema({
     passwordHash: String
 })
 
-const UserModel = (database) => database.model('User', UserSchema)
+const UserModel = mongoose.model('User', UserSchema)
 
 module.exports = UserModel
