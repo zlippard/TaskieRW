@@ -1,5 +1,4 @@
 const bcrypt = require('bcrypt')
-
 const cryptSalt = 10
 
 const passwordUtils = {}

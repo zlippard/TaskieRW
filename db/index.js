@@ -1,7 +1,9 @@
 const config = require("./config")
 
-function connectToDatabase(database) {
+const databaseIndex = {}
+
+databaseIndex.connectToDatabase = (database) => {
     database.connect(config.databaseUrl)
 }
 
-module.exports = connectToDatabase
+module.exports = databaseIndex

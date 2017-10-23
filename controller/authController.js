@@ -13,8 +13,7 @@ const authController = (model) => {
                 }
 
                 if (user) { //ak ga ima jebo ga caca
-                    res.sendStatus(401)
-                    next()
+                    res.send(errorUtils.unauthorized())
                     throw 401
                 } else {
                     const signUpUser = {

@@ -1,10 +1,8 @@
-const tokenUtils = require('../utils/tokenUtils')
-
-const userController = (model) => {
+const userController = (userModel) => {
     const controller = {}
 
     controller.getAll = (req, res, next) => {
-        model.find()
+        userModel.find()
             .then((users) => {
                 res.json(users.map((user) => {
                     return {
@@ -19,9 +17,13 @@ const userController = (model) => {
     }
 
     controller.getById = (req, res, next) => {
-        model.findById(req.params.id)
+        userModel.findById(req.params.id)
             .then((user) => {
-                res.json(user)
+                res.json({
+                    id: user._id,
+                    email: user.email,
+                    name: user.name
+                })
             })
             .catch((error) => {
                 next(error)
@@ -29,7 +31,7 @@ const userController = (model) => {
     }
 
     controller.delete = (req, res, next) => {
-        model.remove()
+        userModel.remove()
             .then(() => res.sendStatus(200))
             .catch((error) => {
                 next(error)
@@ -37,7 +39,7 @@ const userController = (model) => {
     }
 
     controller.deleteUser = (req, res, next) => {
-        model.findById(req.params.id).remove()
+        userModel.findById(req.params.id).remove()
             .then(() => res.sendStatus(200))
             .catch((error) => {
                 next(error)

@@ -8,9 +8,14 @@ const authRouter = (authController) => {
     return require('./auth')(authController)
 }
 
+const noteRouter = (noteController) => {
+    return require('./note')(noteController)
+}
+
 module.exports = (controllers) => {
     router.use('/user', userRouter(controllers.userController))
     router.use('/', authRouter(controllers.authController))
+    router.use('/note', noteRouter(controllers.noteController))
 
     return router
 }

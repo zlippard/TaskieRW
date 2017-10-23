@@ -10,15 +10,20 @@ const config = require('./db/config')
 const mongoose = require('mongoose')
 mongoose.Promise = global.Promise
 
-require('./db/index')(mongoose)
+require('./db/index').connectToDatabase(mongoose)
 
-//user controller
+//models
 const UserModel = require('./db/model/userSchema')
-const user = require("./controller/userController")
-const auth = require('./controller/authController')
+const NoteModel = require('./db/model/noteSchema')
 
-const userController = user(UserModel)
+//controllers
+const user = require('./controller/userController')
+const auth = require('./controller/authController')
+const note = require('./controller/noteController')
+
+const userController = user(UserModel, NoteModel)
 const authController = auth(UserModel)
+const noteController = note(NoteModel)
 
 //application & routing
 app.use(bodyParser.json())
@@ -26,7 +31,8 @@ app.use(bodyParser.urlencoded({extended: true}))
 
 require('./routes/index')(app, {
     userController: userController,
-    authController: authController
+    authController: authController,
+    noteController: noteController
 })
 
 // view engine setup
