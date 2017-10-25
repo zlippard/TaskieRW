@@ -6,13 +6,15 @@ const noteController = (noteModel) => {
     controller.getNotes = (req, res, next) => {
         noteModel.find({userId: req.user._id})
             .then((notes) => {
-                return notes.map((note) => {
-                    return {
-                        id: note._id,
-                        title: note.title,
-                        content: note.content
-                    }
-                })
+                return {
+                    notes: notes.map((note) => {
+                        return {
+                            id: note._id,
+                            title: note.title,
+                            content: note.content
+                        }
+                    })
+                }
             })
             .then((trimmedNotes) => {
                 res.status(200)
