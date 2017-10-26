@@ -11,8 +11,7 @@ const factory = (controller) => {
     router.post('/', controller.saveNote)
     router.post('/favorite', controller.setNoteFavorite)
 
-    router.delete('/:id', controller.deleteNoteById)
-
+    router.post('/delete', controller.deleteNoteById)
 
     return router
 }

@@ -4,9 +4,14 @@ const noteController = (noteModel) => {
     const controller = {}
 
     controller.getNotes = (req, res, next) => {
+        const page = req.query.page
+        const take = 10
+        const skip = (page - 1) * take
+
         noteModel.find({userId: req.user._id})
-        //.select() //todo pogledaj
-            .then((notes) => {
+            .skip(skip)
+            .limit(take)
+            .then(notes => {
                 const trimmedNotes = notes.map((note) => {
                     return {
                         id: note._id,
@@ -16,13 +21,13 @@ const noteController = (noteModel) => {
                     }
                 })
 
-                const sortedNotes = trimmedNotes.sort((first, second) => second.isFavorite)
+                const sortedNotes = trimmedNotes.sort((_, second) => second.isFavorite)
 
                 return {
                     notes: sortedNotes
                 }
             })
-            .then((trimmedNotes) => {
+            .then(trimmedNotes => {
                 res.status(200)
                 res.json(trimmedNotes)
             })
@@ -62,7 +67,7 @@ const noteController = (noteModel) => {
     }
 
     controller.deleteNoteById = (req, res, next) => {
-        noteModel.findById(req.body.id)
+        noteModel.findById(req.query.noteId)
             .then((note, error) => {
                     if (error) {
                         throw  error
