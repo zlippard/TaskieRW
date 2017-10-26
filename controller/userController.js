@@ -39,8 +39,15 @@ const userController = (userModel) => {
     }
 
     controller.deleteUser = (req, res, next) => {
-        userModel.findById(req.params.id).remove()
-            .then(() => res.sendStatus(200))
+        userModel.findById(req.params.id)
+            .then(user => {
+                if (!user) {
+                    throw nekiKurac
+                }
+
+                return user.remove()
+            })
+            .then(() => res.sendStatus(200))//todo does the user exist or not
             .catch((error) => {
                 next(error)
             })

@@ -8,7 +8,7 @@ const authController = (model) => {
     controller.register = (req, res, next) => {
         model.findOne({email: req.body.email})
             .then((user, error) => {
-                if (error) {
+                if (error) { //todo sve proslijedi na error handler
                     throw error
                 }
 
@@ -24,15 +24,10 @@ const authController = (model) => {
 
                     model(signUpUser).save()
 
-                    return { //we trim the rest of the data
-                        name: signUpUser.name,
-                        email: signUpUser.email
-                    }
+                    res.status(200)
+                    res.json({message: 'Success'})
                 }
-            }).then(() => {
-            res.status(200)
-            res.json({message: 'Success'})
-        }).catch((error) => {
+            }).catch((error) => {
             next(error)
         })
     }
@@ -44,8 +39,6 @@ const authController = (model) => {
                     throw errorUtils.unauthorized()
                 }
 
-                console.log(user)
-
                 if (passwordUtils.compareHash(req.body.password, user.passwordHash)) {
                     const token = tokenService.encode({
                         id: user.id,
@@ -53,9 +46,6 @@ const authController = (model) => {
                     }, process.env.TOKEN_SECRET)
 
                     res.json({
-                        name: user.name,
-                        email: user.email,
-                        id: user.id,
                         token: token
                     })
                 } else {

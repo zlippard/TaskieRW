@@ -5,15 +5,21 @@ const noteController = (noteModel) => {
 
     controller.getNotes = (req, res, next) => {
         noteModel.find({userId: req.user._id})
+        //.select() //todo pogledaj
             .then((notes) => {
+                const trimmedNotes = notes.map((note) => {
+                    return {
+                        id: note._id,
+                        title: note.title,
+                        content: note.content,
+                        isFavorite: note.isFavorite
+                    }
+                })
+
+                const sortedNotes = trimmedNotes.sort((first, second) => second.isFavorite)
+
                 return {
-                    notes: notes.map((note) => {
-                        return {
-                            id: note._id,
-                            title: note.title,
-                            content: note.content
-                        }
-                    })
+                    notes: sortedNotes
                 }
             })
             .then((trimmedNotes) => {
@@ -39,7 +45,8 @@ const noteController = (noteModel) => {
         const newNote = {
             userId: req.user._id,
             title: note.title,
-            content: note.content
+            content: note.content,
+            isFavorite: false
         }
 
         noteModel(newNote).save()
@@ -50,8 +57,7 @@ const noteController = (noteModel) => {
                 })
             })
             .catch((error) => {
-                next()
-                throw error
+                next(error)
             })
     }
 
@@ -76,8 +82,25 @@ const noteController = (noteModel) => {
                 })
             })
             .catch((error) => {
+                next(error) //todo next(errorMiddleware.handleError(error))
+            })
+    }
+
+    controller.setNoteFavorite = (req, res, next) => {
+        noteModel.findById(req.query.noteId)
+            .then(note => {
+                if (!note) {
+                    throw "Jebiga"
+                }
+
+                return note.update({isFavorite: !note.isFavorite})
+            })
+            .then(() => {
+                res.status(200)
+                res.json({message: "Success"})
+            })
+            .catch(error => {
                 next(error)
-                throw error
             })
     }
 

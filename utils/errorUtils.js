@@ -8,6 +8,6 @@ errorUtils.unauthorized = () => {
     error.statusCode = statusCodes.UNAUTHORIZED
 
     return error
-}
+} //todo sredi leptejebo
 
 module.exports = errorUtils

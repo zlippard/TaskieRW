@@ -9,8 +9,10 @@ const factory = (controller) => {
     router.get('/', controller.getNotes)
 
     router.post('/', controller.saveNote)
+    router.post('/favorite', controller.setNoteFavorite)
 
     router.delete('/:id', controller.deleteNoteById)
+
 
     return router
 }
