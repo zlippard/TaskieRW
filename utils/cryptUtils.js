@@ -1,10 +1,11 @@
+const constants = require('config')
 const bcrypt = require('bcrypt')
 const cryptSalt = 10
 
 const cryptUtils = {}
 
 cryptUtils.generateVerificationCode = () => {
-    return bcrypt.hashSync(process.env.VERIFICATION_SECRET, cryptSalt)
+    return bcrypt.hashSync(constants.VERIFICATION_SECRET, cryptSalt)
 }
 
 cryptUtils.cryptPassword = (password) => {

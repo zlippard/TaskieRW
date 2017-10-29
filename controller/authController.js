@@ -97,6 +97,16 @@ const authController = (model) => {
             })
     }
 
+    controller.facebookLogin = (req, res, next) => {
+        const facebookToken = req.query.facebookToken
+
+        if (!facebookToken) {
+            next(errorUtils.unauthorized())
+        }
+
+        //todo requestaj usera preko fejs API-ja
+    }
+
     return controller
 }
 

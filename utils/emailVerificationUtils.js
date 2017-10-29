@@ -3,7 +3,7 @@ const nodemailer = require('nodemailer')
 const emailVerificationUtils = {}
 
 emailVerificationUtils.sendEmail = (email, verificationCode) => {
-    const transporter = nodemailer.createTransport({
+    const transporter = nodemailer.createTransport({ //todo znas sta ti je raditi
         host: 'smtp.mailgun.org',
         port: 587,
         secure: false,

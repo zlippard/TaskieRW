@@ -39,7 +39,7 @@ require('./routes/index')(app, {
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'pug')
 
-app.listen(config.port, () => {
+app.listen(config.PORT, () => {
     console.log('Server is up m8')
 })
 
