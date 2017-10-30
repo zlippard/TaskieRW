@@ -1,15 +1,17 @@
 const nodemailer = require('nodemailer')
+const appConstants = require('../config')
 
 const emailVerificationUtils = {}
 
+
 emailVerificationUtils.sendEmail = (email, verificationCode) => {
     const transporter = nodemailer.createTransport({ //todo znas sta ti je raditi
-        host: 'smtp.mailgun.org',
+        host: appConstants.EMAIL_PROVIDER,
         port: 587,
         secure: false,
         auth: {
-            user: 'postmaster@sandbox4e02241b2223468fad226366b42a03a0.mailgun.org',
-            pass: 'password'
+            user: appConstants.EMAIL_PROVIDER_USERNAME,
+            pass: appConstants.EMAIL_PROVIDER_PASSWORD
         }
     })
 

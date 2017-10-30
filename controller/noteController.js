@@ -33,20 +33,18 @@ const noteController = (noteModel) => {
                 res.status(200)
                 res.json(trimmedNotes)
             })
-            .catch((error) => {
-                next(error)
-            })
+            .catch(error => next(error))
     }
 
     controller.saveNote = (req, res, next) => {
         const note = req.body
 
         if (!note) {
-            throw 500 //todo handle error cases properly leptejebo
+            next(errorUtils.notFound())
         }
 
         if (!req.user) {
-            throw errorUtils.unauthorized()
+            next(errorUtils.unauthorized())
         }
 
         const newNote = {
@@ -59,24 +57,20 @@ const noteController = (noteModel) => {
         noteModel(newNote).save()
             .then(() => {
                 res.status(200)
-                res.json({
-                    message: 'Note saved!'
-                })
+                res.json({message: 'Note saved!'})
             })
-            .catch((error) => {
-                next(error)
-            })
+            .catch(error => next(error))
     }
 
     controller.deleteNoteById = (req, res, next) => {
         noteModel.findById(req.query.noteId)
             .then((note, error) => {
                     if (error) {
-                        throw  error
+                        next(error)
                     }
 
                     if (!note) {
-                        throw 500 //todo handel
+                        next(errorUtils.notFound())
                     }
 
                     return note.remove()
@@ -84,20 +78,16 @@ const noteController = (noteModel) => {
             )
             .then(() => {
                 res.status(200)
-                res.json({
-                    message: 'Note deleted!'
-                })
+                res.json({message: 'Note deleted!'})
             })
-            .catch((error) => {
-                next(error) //todo next(errorMiddleware.handleError(error))
-            })
+            .catch(error => next(error))
     }
 
     controller.setNoteFavorite = (req, res, next) => {
         noteModel.findById(req.query.noteId)
             .then(note => {
                 if (!note) {
-                    throw "Jebiga"
+                    next(errorUtils.notFound())
                 }
 
                 return note.update({isFavorite: !note.isFavorite})
@@ -106,9 +96,7 @@ const noteController = (noteModel) => {
                 res.status(200)
                 res.json({message: "Success"})
             })
-            .catch(error => {
-                next(error)
-            })
+            .catch(error => next(error))
     }
 
     return controller

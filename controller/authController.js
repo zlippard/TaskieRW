@@ -9,13 +9,12 @@ const authController = (model) => {
     controller.register = (req, res, next) => {
         model.findOne({email: req.body.email})
             .then((user, error) => {
-                if (error) { //todo sve proslijedi na error handler
-                    throw error
+                if (error) {
+                    next(error)
                 }
 
-                if (user) { //ak ga ima jebo ga caca
-                    res.send(errorUtils.unauthorized())
-                    throw 401
+                if (user) {
+                    next(errorUtils.unauthorized())
                 } else {
                     return userUtils.createUser(req.body, model)
                 }
@@ -24,45 +23,41 @@ const authController = (model) => {
                 res.status(200)
                 res.json({message: 'Success'})
             })
-            .catch((error) => {
-                next(error)
-            })
+            .catch(error => next(error))
     }
 
     controller.login = (req, res, next) => {
         model.findOne({email: req.body.email})
-            .then((user) => {
+            .then(user => {
                 if (!user || !user.verified) {
-                    throw errorUtils.unauthorized()
+                    next(errorUtils.unauthorized())
                 }
 
                 if (cryptUtils.compareHash(req.body.password, user.passwordHash)) {
                     return tokenUtils.generateToken(user)
                 } else {
-                    throw errorUtils.unauthorized()
+                    next(errorUtils.unauthorized())
                 }
             })
             .then(token => res.json({token: token}))
-            .catch((error) => {
-                next(error)
-            })
+            .catch(error => next(error))
     }
 
     controller.verifyUser = (req, res, next) => {
         const verificationCode = req.params.verificationCode
 
         if (!verificationCode) {
-            throw 'Verification code not sent' //todo zna se
+            next(errorUtils.notVerified())
         }
 
         model.findOne({verificationCode: verificationCode})
             .then(user => {
                 if (!user) {
-                    next(errorUtils.unauthorized()) //todo isto se zna
+                    next(errorUtils.unauthorized())
                 }
 
                 if (user.verified) {
-                    throw 'Already verified!'
+                    next(errorUtils.alreadyVerified())
                 }
 
                 return user.update({
@@ -74,9 +69,7 @@ const authController = (model) => {
                 res.status(200)
                 res.json({message: 'Success'})
             })
-            .catch(error => {
-                next(error)
-            })
+            .catch(error => next(error))
     }
 
     return controller

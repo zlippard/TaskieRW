@@ -9,7 +9,10 @@ const constants = {
         facebookAppId: "FACEBOOK_APP_ID",
         facebookSecret: "FACEBOOK_APP_SECRET",
         googleClientId: "GOOGLE_AUTH_CLIENT_ID",
-        googleClientSecret: "GOOGLE_AUTH_CLIENT_SECRET"
+        googleClientSecret: "GOOGLE_AUTH_CLIENT_SECRET",
+        emailProvider: "EMAIL_PROVIDER",
+        emailProviderUsername: "EMAIL_PROVIDER_USERNAME",
+        emailProviderPassword: "EMAIL_PROVIDER_PASSWORD"
     }
 }
 

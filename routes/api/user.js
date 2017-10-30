@@ -10,7 +10,7 @@ const factory = controller => {
     router.get('/:id', controller.getById)
 
     router.delete('/', controller.delete)
-    router.delete('/:id', controller.deleteUser) //todo check out queries
+    router.delete('/:id', controller.deleteUser)
 
     return router
 }

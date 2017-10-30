@@ -10,24 +10,20 @@ const socialController = (model) => {
         googleUtils.getUserProfile(req.query.userToken)
             .then(response => {
                 if (!response) {
-                    throw errorUtils.unauthorized() //Todo
+                    next(errorUtils.unauthorized())
                 }
 
                 return model.findOne({email: user.email})
             })
             .then(user => {
                 if (!user) {
-                    throw errorUtils.unauthorized() //Todo
+                    next(errorUtils.unauthorized())
                 }
 
                 return tokenUtils.generateToken(user)
             })
             .then(token => res.json({token: token}))
-            .catch(error => console.log(error))
-    }
-
-    controller.googleCallback = (req, res, next) => {
-
+            .catch(error => next(error))
     }
 
     controller.facebookLogin = (req, res, next) => {
@@ -40,22 +36,20 @@ const socialController = (model) => {
         facebookUtils.requestMyProfile(facebookToken)
             .then(response => {
                 if (!response) {
-                    throw errorUtils.unauthorized()
+                    next(errorUtils.unauthorized())
                 }
 
                 return model.findOne({email: response.email})
             })
             .then(user => {
                 if (!user) {
-                    throw errorUtils.unauthorized()
+                    next(errorUtils.unauthorized())
                 }
 
                 return tokenUtils.generateToken(user)
             })
             .then(token => res.json({token: token}))
-            .catch(error => {
-                next(error)
-            })
+            .catch(error => next(error))
     }
 
     return controller
