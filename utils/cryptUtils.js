@@ -1,4 +1,4 @@
-const constants = require('config')
+const constants = require('../config')
 const bcrypt = require('bcrypt')
 const cryptSalt = 10
 

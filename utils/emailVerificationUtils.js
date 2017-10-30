@@ -23,7 +23,11 @@ emailVerificationUtils.sendEmail = (email, verificationCode) => {
         html: `<b><a href=${link}>Click here to verify</a></b>`
     };
 
-    transporter.sendMail(mailOptions, error => console.log(error))
+    transporter.sendMail(mailOptions, error => {
+        if (error) {
+            console.log(error)
+        }
+    })
 }
 module.exports = emailVerificationUtils
 

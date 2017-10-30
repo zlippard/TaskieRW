@@ -1,7 +1,7 @@
 const cryptUtils = require('../utils/cryptUtils')
 const errorUtils = require('../utils/errorUtils')
-const tokenService = require('jwt-simple')
-const emailUtils = require('../utils/emailVerificationUtils')
+const tokenUtils = require('../utils/tokenUtils')
+const userUtils = require('../utils/userUtils')
 
 const authController = (model) => {
     const controller = {}
@@ -17,26 +17,16 @@ const authController = (model) => {
                     res.send(errorUtils.unauthorized())
                     throw 401
                 } else {
-                    const verificationCode = cryptUtils.generateVerificationCode()
-
-                    const signUpUser = {
-                        name: req.body.name,
-                        email: req.body.email,
-                        passwordHash: cryptUtils.cryptPassword(req.body.password),
-                        verified: false,
-                        verificationCode: verificationCode
-                    }
-
-                    model(signUpUser).save()
-
-                    emailUtils.sendEmail(req.body.email, verificationCode)
-
-                    res.status(200)
-                    res.json({message: 'Success'})
+                    return userUtils.createUser(req.body, model)
                 }
-            }).catch((error) => {
-            next(error)
-        })
+            })
+            .then(() => {
+                res.status(200)
+                res.json({message: 'Success'})
+            })
+            .catch((error) => {
+                next(error)
+            })
     }
 
     controller.login = (req, res, next) => {
@@ -47,18 +37,12 @@ const authController = (model) => {
                 }
 
                 if (cryptUtils.compareHash(req.body.password, user.passwordHash)) {
-                    const token = tokenService.encode({
-                        id: user.id,
-                        email: user.email
-                    }, process.env.TOKEN_SECRET)
-
-                    res.json({
-                        token: token
-                    })
+                    return tokenUtils.generateToken(user)
                 } else {
                     throw errorUtils.unauthorized()
                 }
             })
+            .then(token => res.json({token: token}))
             .catch((error) => {
                 next(error)
             })
@@ -88,23 +72,11 @@ const authController = (model) => {
             })
             .then(() => {
                 res.status(200)
-                res.json({
-                    message: 'Success'
-                })
+                res.json({message: 'Success'})
             })
             .catch(error => {
                 next(error)
             })
-    }
-
-    controller.facebookLogin = (req, res, next) => {
-        const facebookToken = req.query.facebookToken
-
-        if (!facebookToken) {
-            next(errorUtils.unauthorized())
-        }
-
-        //todo requestaj usera preko fejs API-ja
     }
 
     return controller

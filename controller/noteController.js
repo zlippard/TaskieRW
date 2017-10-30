@@ -8,7 +8,9 @@ const noteController = (noteModel) => {
         const take = 10
         const skip = (page - 1) * take
 
-        noteModel.find({userId: req.user._id})
+        const userId = req.userId
+
+        noteModel.find({userId: userId})
             .skip(skip)
             .limit(take)
             .then(notes => {

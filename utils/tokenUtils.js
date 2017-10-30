@@ -18,15 +18,22 @@ tokenUtils.validateToken = (req, res, next) => {
         return next(errorUtils.unauthorized())
     }
 
-    const user = userModel.findOne({id: tokenUser.id})
+    userModel.findById(tokenUser.id)
+        .then(user => {
+            if (!user) {
+                return next(errorUtils.unauthorized())
+            }
 
-    if (!user) {
-        return next(errorUtils.unauthorized())
-    }
+            req.userId = user._id
+            next()
+        })
+}
 
-    //everything's alright, set the user and pass on
-    req.user = tokenUser
-    next()
+tokenUtils.generateToken = user => {
+    return tokenService.encode({
+        id: user.id,
+        email: user.email
+    }, process.env.TOKEN_SECRET)
 }
 
 module.exports = tokenUtils
