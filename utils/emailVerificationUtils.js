@@ -3,7 +3,6 @@ const appConstants = require('../config')
 
 const emailVerificationUtils = {}
 
-
 emailVerificationUtils.sendEmail = (email, verificationCode) => {
     const transporter = nodemailer.createTransport({ //todo znas sta ti je raditi
         host: appConstants.EMAIL_PROVIDER,

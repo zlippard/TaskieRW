@@ -4,7 +4,7 @@ const emailUtils = require("./emailVerificationUtils")
 const userUtils = {}
 
 userUtils.createUser = (user, model) => {
-    const verificationCode = cryptUtils.generateVerificationCode()
+    const verificationCode = cryptUtils.generateVerificationCode().replace('/', '')
 
     const signUpUser = {
         name: user.name,

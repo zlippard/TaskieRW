@@ -1,11 +1,8 @@
 const app = require('express')()
-const path = require('path')
 const bodyParser = require('body-parser')
-const appConstants = require('./config')
+const path = require('path')
 
-//setup environment variables
-require('dotenv').config({path: './env/development'})
-
+require('dotenv').config({path: path.join(__dirname, 'env', `.env.${process.env.NODE_ENV}`)})
 
 //database
 const mongoose = require('mongoose')
@@ -39,9 +36,11 @@ require('./routes/index')(app, {
     socialController: socialController
 })
 
-const errorMiddleware = require('./middleware/errorMiddleware')
+const appConstants = require('./config')
 
-app.use(errorMiddleware)
+// const errorMiddleware = require('./middleware/errorMiddleware')
+//
+// app.use(errorMiddleware)
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))
