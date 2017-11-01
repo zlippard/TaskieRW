@@ -10,6 +10,10 @@ const noteController = (noteModel) => {
 
         const userId = req.userId
 
+        if (!userId) {
+            next(errorUtils.unauthorized())
+        }
+
         noteModel.find({userId: userId})
             .skip(skip)
             .limit(take)
@@ -43,12 +47,12 @@ const noteController = (noteModel) => {
             next(errorUtils.notFound())
         }
 
-        if (!req.user) {
+        if (!req.userId) {
             next(errorUtils.unauthorized())
         }
 
         const newNote = {
-            userId: req.user._id,
+            userId: req.userId,
             title: note.title,
             content: note.content,
             isFavorite: false
