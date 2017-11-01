@@ -14,7 +14,7 @@ emailVerificationUtils.sendEmail = (email, verificationCode) => {
         }
     })
 
-    const link = `http://localhost:3000/api/login/${verificationCode}`
+    const link = `${appConstants.BASE_URL}/api/login/${verificationCode}`
 
     const mailOptions = {
         from: '<fbabic96@gmail.com>',

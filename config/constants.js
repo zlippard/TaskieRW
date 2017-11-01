@@ -8,7 +8,8 @@ const constants = {
         verificationSecret: 'VERIFICATION_SECRET',
         emailProvider: 'EMAIL_PROVIDER',
         emailProviderUsername: 'EMAIL_PROVIDER_USERNAME',
-        emailProviderPassword: 'EMAIL_PROVIDER_PASSWORD'
+        emailProviderPassword: 'EMAIL_PROVIDER_PASSWORD',
+        baseUrl: 'http://localhost:3000'
     }
 }
 
