@@ -9,7 +9,7 @@ const constants = {
         emailProvider: 'EMAIL_PROVIDER',
         emailProviderUsername: 'EMAIL_PROVIDER_USERNAME',
         emailProviderPassword: 'EMAIL_PROVIDER_PASSWORD',
-        baseUrl: 'http://localhost:3000'
+        baseUrl: 'BASE_URL'
     }
 }
 
