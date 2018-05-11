@@ -10,7 +10,7 @@ userUtils.createUser = (user, model) => {
         name: user.name,
         email: user.email,
         passwordHash: cryptUtils.cryptPassword(user.password),
-        verified: false,
+        verified: true,
         verificationCode: verificationCode
     }
 

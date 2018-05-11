@@ -29,7 +29,7 @@ const authController = (model) => {
     controller.login = (req, res, next) => {
         model.findOne({email: req.body.email})
             .then(user => {
-                if (!user || !user.verified) {
+                if (!user) {
                     next(errorUtils.unauthorized())
                 }
 
