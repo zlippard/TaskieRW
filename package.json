@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node app",
-    "dev": "export NODE_ENV=development && nodemon app.js"
+    "dev": "set NODE_ENV=development && nodemon app.js"
   },
   "dependencies": {
     "bcrypt": "latest",

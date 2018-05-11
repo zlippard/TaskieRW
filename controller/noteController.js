@@ -5,8 +5,16 @@ const noteController = (noteModel) => {
 
     controller.getNotes = (req, res, next) => {
         const page = req.query.page
-        const take = 10
-        const skip = (page - 1) * take
+
+        let take
+
+        if (page) {
+            take = 10
+        } else {
+            take = 1000
+        }
+
+        const skip = page ? (page - 1) * take : 0
 
         const userId = req.userId
 
