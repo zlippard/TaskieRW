@@ -8,7 +8,6 @@ const socialRouter = socialController => require('./social')(socialController)
 module.exports = controllers => {
     router.use('/user', userRouter(controllers.userController))
     router.use('/', authRouter(controllers.authController))
-    router.use('/', socialRouter(controllers.socialController))
     router.use('/note', noteRouter(controllers.noteController))
 
     return router

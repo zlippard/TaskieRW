@@ -18,12 +18,12 @@ const NoteModel = require('./db/model/noteSchema')
 const user = require('./controller/userController')
 const auth = require('./controller/authController')
 const note = require('./controller/noteController')
-const social = require('./controller/socialController')
+//const social = require('./controller/socialController')
 
 const userController = user(UserModel, NoteModel)
 const authController = auth(UserModel)
 const noteController = note(NoteModel)
-const socialController = social(UserModel)
+//const socialController = social(UserModel)
 
 //application & routing
 app.use(bodyParser.json())
@@ -32,8 +32,7 @@ app.use(bodyParser.urlencoded({extended: true}))
 require('./routes/index')(app, {
     userController: userController,
     authController: authController,
-    noteController: noteController,
-    socialController: socialController
+    noteController: noteController
 })
 
 const appConstants = require('./config')
