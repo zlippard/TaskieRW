@@ -7,9 +7,12 @@ const factory = (controller) => {
     })
 
     router.get('/', controller.getNotes)
+    router.get('/favorite', controller.getFavoriteNotes)
 
     router.post('/', controller.saveNote)
     router.post('/favorite', controller.setNoteFavorite)
+    router.post('/complete', controller.setNoteCompleted)
+    router.post('/edit', controller.editNote)
 
     router.post('/delete', controller.deleteNoteById)
 

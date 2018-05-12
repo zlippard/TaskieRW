@@ -31,7 +31,9 @@ const noteController = (noteModel) => {
                         id: note._id,
                         title: note.title,
                         content: note.content,
-                        isFavorite: note.isFavorite
+                        isFavorite: note.isFavorite ? note.isFavorite : false,
+                        taskPriority: note.taskPriority ? note.taskPriority : 1,
+                        isCompleted: note.isCompleted ? note.isCompleted : false
                     }
                 })
 
@@ -39,6 +41,37 @@ const noteController = (noteModel) => {
 
                 return {
                     notes: sortedNotes
+                }
+            })
+            .then(trimmedNotes => {
+                res.status(200)
+                res.json(trimmedNotes)
+            })
+            .catch(error => next(error))
+    }
+
+    controller.getFavoriteNotes = (req, res, next) => {
+        const userId = req.userId
+
+        if (!userId) {
+            next(errorUtils.unauthorized())
+        }
+
+        noteModel.find({userId: userId, isFavorite: true})
+            .then(notes => {
+                const trimmedNotes = notes.map((note) => {
+                    return {
+                        id: note._id,
+                        title: note.title,
+                        content: note.content,
+                        isFavorite: note.isFavorite ? note.isFavorite : false,
+                        taskPriority: note.taskPriority ? note.taskPriority : 1,
+                        isCompleted: note.isCompleted ? note.isCompleted : false
+                    }
+                })
+
+                return {
+                    notes: trimmedNotes
                 }
             })
             .then(trimmedNotes => {
@@ -63,7 +96,9 @@ const noteController = (noteModel) => {
             userId: req.userId,
             title: note.title,
             content: note.content,
-            isFavorite: false
+            isFavorite: false,
+            isCompleted: false,
+            taskPriority: note.taskPriority
         }
 
         noteModel(newNote).save()
@@ -103,6 +138,44 @@ const noteController = (noteModel) => {
                 }
 
                 return note.update({isFavorite: !note.isFavorite})
+            })
+            .then(() => {
+                res.status(200)
+                res.json({message: "Success"})
+            })
+            .catch(error => next(error))
+    }
+
+    controller.setNoteCompleted = (req, res, next) => {
+        noteModel.findById(req.query.noteId)
+            .then(note => {
+                if (!note) {
+                    next(errorUtils.notFound())
+                }
+
+                return note.update({isCompleted: true})
+            })
+            .then(() => {
+                res.status(200)
+                res.json({message: "Success"})
+            })
+            .catch(error => next(error))
+    }
+
+    controller.editNote = (req, res, next) => {
+        noteModel.findById(req.body.noteId)
+            .then(note => {
+                if (!note) {
+                    next(errorUtils.notFound())
+                }
+
+                const newNote = req.body
+
+                return note.update({
+                    title: newNote.title ? newNote.title : note.title,
+                    content: newNote.content ? newNote.content : note.content,
+                    taskPriority: newNote.taskPriority ? newNote.taskPriority : note.taskPriority ? note.taskPriority : 1
+                })
             })
             .then(() => {
                 res.status(200)
