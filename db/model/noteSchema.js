@@ -7,7 +7,8 @@ const NoteSchema = new Schema({
     content: String,
     isFavorite: Boolean,
     isCompleted: Boolean,
-    taskPriority: Number //1 - low, 2 - medium, 3 - high
+    taskPriority: Number, //1 - low, 2 - medium, 3 - high
+    dueDate: String
 })
 
 const NoteModel = mongoose.model('Note', NoteSchema)

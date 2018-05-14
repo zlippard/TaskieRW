@@ -33,7 +33,8 @@ const noteController = (noteModel) => {
                         content: note.content,
                         isFavorite: note.isFavorite ? note.isFavorite : false,
                         taskPriority: note.taskPriority ? note.taskPriority : 1,
-                        isCompleted: note.isCompleted ? note.isCompleted : false
+                        isCompleted: note.isCompleted ? note.isCompleted : false,
+                        dueDate: note.dueDate ? note.dueDate : ""
                     }
                 })
 
@@ -66,7 +67,8 @@ const noteController = (noteModel) => {
                         content: note.content,
                         isFavorite: note.isFavorite ? note.isFavorite : false,
                         taskPriority: note.taskPriority ? note.taskPriority : 1,
-                        isCompleted: note.isCompleted ? note.isCompleted : false
+                        isCompleted: note.isCompleted ? note.isCompleted : false,
+                        dueDate: note.dueDate ? note.dueDate : ""
                     }
                 })
 
@@ -98,7 +100,8 @@ const noteController = (noteModel) => {
             content: note.content,
             isFavorite: false,
             isCompleted: false,
-            taskPriority: note.taskPriority
+            taskPriority: note.taskPriority,
+            dueDate: note.dueDate
         }
 
         noteModel(newNote).save()
@@ -174,12 +177,45 @@ const noteController = (noteModel) => {
                 return note.update({
                     title: newNote.title ? newNote.title : note.title,
                     content: newNote.content ? newNote.content : note.content,
-                    taskPriority: newNote.taskPriority ? newNote.taskPriority : note.taskPriority ? note.taskPriority : 1
+                    taskPriority: newNote.taskPriority ? newNote.taskPriority : note.taskPriority ? note.taskPriority : 1,
+                    dueDate: newNote.dueDate ? newNote.dueDate : note.dueDate ? note.dueDate : ""
                 })
             })
             .then(() => {
                 res.status(200)
                 res.json({message: "Success"})
+            })
+            .catch(error => next(error))
+    }
+
+    controller.getCompletedNotes = (req, res, next) => {
+        const userId = req.userId
+
+        if (!userId) {
+            next(errorUtils.unauthorized())
+        }
+
+        noteModel.find({userId: userId, isCompleted: true})
+            .then(notes => {
+                const trimmedNotes = notes.map((note) => {
+                    return {
+                        id: note._id,
+                        title: note.title,
+                        content: note.content,
+                        isFavorite: note.isFavorite ? note.isFavorite : false,
+                        taskPriority: note.taskPriority ? note.taskPriority : 1,
+                        isCompleted: note.isCompleted ? note.isCompleted : false,
+                        dueDate: note.dueDate ? note.dueDate : ""
+                    }
+                })
+
+                return {
+                    notes: trimmedNotes
+                }
+            })
+            .then(trimmedNotes => {
+                res.status(200)
+                res.json(trimmedNotes)
             })
             .catch(error => next(error))
     }
