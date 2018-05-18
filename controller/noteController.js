@@ -113,7 +113,7 @@ const noteController = (noteModel) => {
     }
 
     controller.deleteNoteById = (req, res, next) => {
-        noteModel.findById(req.query.noteId)
+        noteModel.findById(req.query.id)
             .then((note, error) => {
                     if (error) {
                         next(error)
@@ -166,7 +166,8 @@ const noteController = (noteModel) => {
     }
 
     controller.editNote = (req, res, next) => {
-        noteModel.findById(req.body.noteId)
+        noteModel.findById(req.body.id)
+
             .then(note => {
                 if (!note) {
                     next(errorUtils.notFound())
