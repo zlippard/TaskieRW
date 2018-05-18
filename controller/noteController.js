@@ -134,7 +134,7 @@ const noteController = (noteModel) => {
     }
 
     controller.setNoteFavorite = (req, res, next) => {
-        noteModel.findById(req.query.noteId)
+        noteModel.findById(req.query.id)
             .then(note => {
                 if (!note) {
                     next(errorUtils.notFound())
