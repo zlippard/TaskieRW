@@ -51,6 +51,36 @@ const noteController = (noteModel) => {
             .catch(error => next(error))
     }
 
+    controller.getNoteById = (req, res, next) => {
+        const id = req.params.id
+
+        if (!id) {
+            next(errorUtils.notFound())
+        }
+
+        noteModel.findById(id)
+            .then(note => {
+                if (!note) {
+                    next(!errorUtils.notFound())
+                }
+
+                return {
+                    id: note._id,
+                    title: note.title,
+                    content: note.content,
+                    isFavorite: note.isFavorite ? note.isFavorite : false,
+                    taskPriority: note.taskPriority ? note.taskPriority : 1,
+                    isCompleted: note.isCompleted ? note.isCompleted : false,
+                    dueDate: note.dueDate ? note.dueDate : ""
+                }
+            })
+            .then(note => {
+                res.status(200)
+                res.json(note)
+            })
+            .catch(error => next(error))
+    }
+
     controller.getFavoriteNotes = (req, res, next) => {
         const userId = req.userId
 
@@ -150,7 +180,7 @@ const noteController = (noteModel) => {
     }
 
     controller.setNoteCompleted = (req, res, next) => {
-        noteModel.findById(req.query.noteId)
+        noteModel.findById(req.query.id)
             .then(note => {
                 if (!note) {
                     next(errorUtils.notFound())

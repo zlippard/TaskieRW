@@ -14,6 +14,7 @@ const factory = (controller) => {
     router.post('/complete', controller.setNoteCompleted)
     router.post('/edit', controller.editNote)
     router.get('/completed', controller.getCompletedNotes)
+    router.get('/:id', controller.getNoteById)
 
     router.post('/delete', controller.deleteNoteById)
 
