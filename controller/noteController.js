@@ -186,7 +186,7 @@ const noteController = (noteModel) => {
                     next(errorUtils.notFound())
                 }
 
-                return note.update({isCompleted: true})
+                return note.update({isCompleted: !note.isCompleted})
             })
             .then(() => {
                 res.status(200)
