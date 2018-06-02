@@ -134,10 +134,11 @@ const noteController = (noteModel) => {
             dueDate: note.dueDate
         }
 
-        noteModel(newNote).save()
+        noteModel(newNote)
+            .save()
             .then(() => {
                 res.status(200)
-                res.json({message: 'Note saved!'})
+                res.json(newNote)
             })
             .catch(error => next(error))
     }
