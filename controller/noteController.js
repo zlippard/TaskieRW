@@ -136,9 +136,18 @@ const noteController = (noteModel) => {
 
         noteModel(newNote)
             .save()
-            .then(() => {
+            .then((savedNote) => {
                 res.status(200)
-                res.json(newNote)
+                res.json({
+                    id: savedNote._id,
+                    userId: savedNote.userId,
+                    title: savedNote.title,
+                    content: savedNote.content,
+                    isFavorite: false,
+                    isCompleted: false,
+                    taskPriority: savedNote.taskPriority,
+                    dueDate: savedNote.dueDate
+                })
             })
             .catch(error => next(error))
     }
