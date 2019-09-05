@@ -4,35 +4,36 @@ const errorUtils = {}
 
 errorUtils.unauthorized = () => {
     const error = new Error()
-    error.inDomain = true
+    error.errorMessage = "Unauthorized"
+    error.message = "Unauthorized"
     error.statusCode = statusCodes.UNAUTHORIZED
+    error.code = statusCodes.UNAUTHORIZED
 
     return error
 }
 
 errorUtils.notVerified = () => {
     const error = new Error()
-    error.inDomain = true
+    error.code = statusCodes.UNAUTHORIZED
+    error.message = "Not verified"
     error.statusCode = statusCodes.UNAUTHORIZED
-    error.message = 'Not verified'
+    error.errorMessage = 'Not verified'
 
     return error
 }
 
 errorUtils.notFound = () => {
     const error = new Error()
-    error.inDomain = true
-    error.statusCode = statusCodes.INTERNAL_SERVER_ERROR
-    error.message = 'Not found'
+    error.code = statusCodes.INTERNAL_SERVER_ERROR
+    error.errorMessage = 'Not found'
 
     return error
 }
 
 errorUtils.alreadyVerified = () => {
     const error = new Error()
-    error.inDomain = true
-    error.statusCode = statusCodes.UNAUTHORIZED
-    error.message = 'Already verified'
+    error.code = statusCodes.UNAUTHORIZED
+    error.errorMessage = 'Already verified'
 
     return error
 }

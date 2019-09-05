@@ -13,34 +13,34 @@ const authController = (model) => {
                     next(error)
                 }
 
-                if (user) {
-                    next(errorUtils.unauthorized())
-                } else {
+                if (!user) {
                     return userUtils.createUser(req.body, model)
+                } else {
+                    throw errorUtils.unauthorized()
                 }
             })
             .then(() => {
                 res.status(200)
-                res.json({message: 'Success'})
+                res.send("Success!")
             })
-            .catch(error => next(error))
+            .catch(error => res.status(error.code).send(error))
     }
 
     controller.login = (req, res, next) => {
         model.findOne({email: req.body.email})
             .then(user => {
                 if (!user) {
-                    next(errorUtils.unauthorized())
+                    throw errorUtils.unauthorized()
                 }
 
                 if (cryptUtils.compareHash(req.body.password, user.passwordHash)) {
                     return tokenUtils.generateToken(user)
                 } else {
-                    next(errorUtils.unauthorized())
+                    throw errorUtils.unauthorized()
                 }
             })
             .then(token => res.json({token: token}))
-            .catch(error => next(error))
+            .catch(error => res.status(error.code).send(error))
     }
 
     controller.verifyUser = (req, res, next) => {
