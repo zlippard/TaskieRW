@@ -23,7 +23,6 @@ const note = require('./controller/noteController')
 const userController = user(UserModel, NoteModel)
 const authController = auth(UserModel)
 const noteController = note(NoteModel)
-//const socialController = social(UserModel)
 
 //application & routing
 app.use(bodyParser.json())

@@ -22,7 +22,7 @@ const noteController = (noteModel) => {
             throw errorUtils.unauthorized()
         }
 
-        noteModel.find({userId: userId, isFavorite: false})
+        noteModel.find({userId: userId})
             .skip(skip)
             .limit(take)
             .then(notes => {
