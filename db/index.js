@@ -1,7 +1,9 @@
-const config = require("./config")
+const config = require('../config')
 
-function connectToDatabase(database) {
-    database.connect(config.databaseUrl)
-}
+const database = {}
 
-module.exports = connectToDatabase
+database.connectToDatabase = database => database.connect(config.DB_URL)
+    .then(() => console.log("connected to database"))
+    .catch((error) => console.log(error))
+
+module.exports = database
