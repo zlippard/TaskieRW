@@ -10,7 +10,7 @@ const authController = (model) => {
         model.findOne({email: req.body.email})
             .then((user, error) => {
                 if (error) {
-                    next(error)
+                    throw error
                 }
 
                 if (!user) {
@@ -41,35 +41,6 @@ const authController = (model) => {
             })
             .then(token => res.json({token: token}))
             .catch(error => res.status(error.code).send(error))
-    }
-
-    controller.verifyUser = (req, res, next) => {
-        const verificationCode = req.params.verificationCode
-
-        if (!verificationCode) {
-            next(errorUtils.notVerified())
-        }
-
-        model.findOne({verificationCode: verificationCode})
-            .then(user => {
-                if (!user) {
-                    next(errorUtils.unauthorized())
-                }
-
-                if (user.verified) {
-                    next(errorUtils.alreadyVerified())
-                }
-
-                return user.update({
-                    verified: true,
-                    verificationCode: null //we remove it
-                })
-            })
-            .then(() => {
-                res.status(200)
-                res.json({message: 'Success'})
-            })
-            .catch(error => next(error))
     }
 
     return controller

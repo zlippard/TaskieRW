@@ -19,7 +19,7 @@ const noteController = (noteModel) => {
         const userId = req.userId
 
         if (!userId) {
-            next(errorUtils.unauthorized())
+            throw errorUtils.unauthorized()
         }
 
         noteModel.find({userId: userId, isFavorite: false})
@@ -48,80 +48,18 @@ const noteController = (noteModel) => {
                 res.status(200)
                 res.json(trimmedNotes)
             })
-            .catch(error => next(error))
-    }
-
-    controller.getNoteById = (req, res, next) => {
-        const id = req.params.id
-
-        if (!id) {
-            next(errorUtils.notFound())
-        }
-
-        noteModel.findById(id)
-            .then(note => {
-                if (!note) {
-                    next(!errorUtils.notFound())
-                }
-
-                return {
-                    id: note._id,
-                    title: note.title,
-                    content: note.content,
-                    isFavorite: note.isFavorite ? note.isFavorite : false,
-                    taskPriority: note.taskPriority ? note.taskPriority : 1,
-                    isCompleted: note.isCompleted ? note.isCompleted : false,
-                    dueDate: note.dueDate ? note.dueDate : ""
-                }
-            })
-            .then(note => {
-                res.status(200)
-                res.json(note)
-            })
-            .catch(error => next(error))
-    }
-
-    controller.getFavoriteNotes = (req, res, next) => {
-        const userId = req.userId
-
-        if (!userId) {
-            next(errorUtils.unauthorized())
-        }
-
-        noteModel.find({userId: userId, isFavorite: true})
-            .then(notes => {
-                const trimmedNotes = notes.map((note) => {
-                    return {
-                        id: note._id,
-                        title: note.title,
-                        content: note.content,
-                        isFavorite: note.isFavorite ? note.isFavorite : false,
-                        taskPriority: note.taskPriority ? note.taskPriority : 1,
-                        isCompleted: note.isCompleted ? note.isCompleted : false,
-                        dueDate: note.dueDate ? note.dueDate : ""
-                    }
-                })
-
-                return {
-                    notes: trimmedNotes
-                }
-            })
-            .then(trimmedNotes => {
-                res.status(200)
-                res.json(trimmedNotes)
-            })
-            .catch(error => next(error))
+            .catch(error => res.status(error.code).send(error))
     }
 
     controller.saveNote = (req, res, next) => {
         const note = req.body
 
         if (!note) {
-            next(errorUtils.notFound())
+            throw errorUtils.notFound()
         }
 
         if (!req.userId) {
-            next(errorUtils.unauthorized())
+            throw errorUtils.unauthorized()
         }
 
         const newNote = {
@@ -149,18 +87,18 @@ const noteController = (noteModel) => {
                     dueDate: savedNote.dueDate
                 })
             })
-            .catch(error => next(error))
+            .catch(error => res.status(error.code).send(error))
     }
 
     controller.deleteNoteById = (req, res, next) => {
         noteModel.findById(req.query.id)
             .then((note, error) => {
                     if (error) {
-                        next(error)
+                        throw error
                     }
 
                     if (!note) {
-                        next(errorUtils.notFound())
+                        throw errorUtils.notFound()
                     }
 
                     return note.remove()
@@ -170,30 +108,14 @@ const noteController = (noteModel) => {
                 res.status(200)
                 res.json({message: 'Note deleted!'})
             })
-            .catch(error => next(error))
-    }
-
-    controller.setNoteFavorite = (req, res, next) => {
-        noteModel.findById(req.query.id)
-            .then(note => {
-                if (!note) {
-                    next(errorUtils.notFound())
-                }
-
-                return note.update({isFavorite: !note.isFavorite})
-            })
-            .then(() => {
-                res.status(200)
-                res.json({message: "Success"})
-            })
-            .catch(error => next(error))
+            .catch(error => res.status(error.code).send(error))
     }
 
     controller.setNoteCompleted = (req, res, next) => {
         noteModel.findById(req.query.id)
             .then(note => {
                 if (!note) {
-                    next(errorUtils.notFound())
+                    throw errorUtils.notFound()
                 }
 
                 return note.update({isCompleted: !note.isCompleted})
@@ -202,63 +124,7 @@ const noteController = (noteModel) => {
                 res.status(200)
                 res.json({message: "Success"})
             })
-            .catch(error => next(error))
-    }
-
-    controller.editNote = (req, res, next) => {
-        noteModel.findById(req.body.id)
-
-            .then(note => {
-                if (!note) {
-                    next(errorUtils.notFound())
-                }
-
-                const newNote = req.body
-
-                return note.update({
-                    title: newNote.title ? newNote.title : note.title,
-                    content: newNote.content ? newNote.content : note.content,
-                    taskPriority: newNote.taskPriority ? newNote.taskPriority : note.taskPriority ? note.taskPriority : 1,
-                    dueDate: newNote.dueDate ? newNote.dueDate : note.dueDate ? note.dueDate : ""
-                })
-            })
-            .then(() => {
-                res.status(200)
-                res.json({message: "Success"})
-            })
-            .catch(error => next(error))
-    }
-
-    controller.getCompletedNotes = (req, res, next) => {
-        const userId = req.userId
-
-        if (!userId) {
-            next(errorUtils.unauthorized())
-        }
-
-        noteModel.find({userId: userId, isCompleted: true})
-            .then(notes => {
-                const trimmedNotes = notes.map((note) => {
-                    return {
-                        id: note._id,
-                        title: note.title,
-                        content: note.content,
-                        isFavorite: note.isFavorite ? note.isFavorite : false,
-                        taskPriority: note.taskPriority ? note.taskPriority : 1,
-                        isCompleted: note.isCompleted ? note.isCompleted : false,
-                        dueDate: note.dueDate ? note.dueDate : ""
-                    }
-                })
-
-                return {
-                    notes: trimmedNotes
-                }
-            })
-            .then(trimmedNotes => {
-                res.status(200)
-                res.json(trimmedNotes)
-            })
-            .catch(error => next(error))
+            .catch(error => res.status(error.code).send(error))
     }
 
     return controller

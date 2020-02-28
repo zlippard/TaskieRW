@@ -6,12 +6,7 @@ const factory = controller => {
         tokenUtils.validateToken(req, res, next)
     })
 
-    router.get('/', controller.getAll)
-    router.get('/:id', controller.getById)
-
-    router.delete('/', controller.delete)
-    router.delete('/:id', controller.deleteUser)
-
+    router.get('/profile', controller.getProfile)
     return router
 }
 
