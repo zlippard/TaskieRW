@@ -1,5 +1,4 @@
 const cryptUtils = require("./cryptUtils")
-const emailUtils = require("./emailVerificationUtils")
 
 const userUtils = {}
 
@@ -15,8 +14,6 @@ userUtils.createUser = (user, model) => {
     }
 
     model(signUpUser).save()
-
-    emailUtils.sendEmail(user.email, verificationCode)
 }
 
 module.exports = userUtils

@@ -6,9 +6,7 @@ const constants = {
         port: 'PORT',
         databaseUrl: 'MONGODB_URI',
         verificationSecret: 'VERIFICATION_SECRET',
-        emailProvider: 'EMAIL_PROVIDER',
-        emailProviderUsername: 'EMAIL_PROVIDER_USERNAME',
-        emailProviderPassword: 'EMAIL_PROVIDER_PASSWORD',
+        tokenSecret: 'TOKEN_SECRET',
         baseUrl: 'BASE_URL'
     }
 }
