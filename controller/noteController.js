@@ -31,17 +31,13 @@ const noteController = (noteModel) => {
                         id: note._id,
                         title: note.title,
                         content: note.content,
-                        isFavorite: note.isFavorite ? note.isFavorite : false,
                         taskPriority: note.taskPriority ? note.taskPriority : 1,
-                        isCompleted: note.isCompleted ? note.isCompleted : false,
-                        dueDate: note.dueDate ? note.dueDate : ""
+                        isCompleted: note.isCompleted ? note.isCompleted : false
                     }
                 })
 
-                const sortedNotes = trimmedNotes.sort((_, second) => second.isFavorite)
-
                 return {
-                    notes: sortedNotes
+                    trimmedNotes
                 }
             })
             .then(trimmedNotes => {
@@ -66,10 +62,8 @@ const noteController = (noteModel) => {
             userId: req.userId,
             title: note.title,
             content: note.content,
-            isFavorite: false,
             isCompleted: false,
-            taskPriority: note.taskPriority,
-            dueDate: note.dueDate
+            taskPriority: note.taskPriority
         }
 
         noteModel(newNote)
@@ -81,10 +75,8 @@ const noteController = (noteModel) => {
                     userId: savedNote.userId,
                     title: savedNote.title,
                     content: savedNote.content,
-                    isFavorite: false,
                     isCompleted: false,
-                    taskPriority: savedNote.taskPriority,
-                    dueDate: savedNote.dueDate
+                    taskPriority: savedNote.taskPriority
                 })
             })
             .catch(error => res.status(error.code).send(error))
