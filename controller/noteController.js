@@ -37,7 +37,7 @@ const noteController = (noteModel) => {
                 })
 
                 return {
-                    trimmedNotes
+                    notes: trimmedNotes
                 }
             })
             .then(trimmedNotes => {
