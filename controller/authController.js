@@ -7,6 +7,7 @@ const authController = (model) => {
     const controller = {}
 
     controller.register = (req, res, next) => {
+        console.log(req.body)
         model.findOne({email: req.body.email})
             .then((user, error) => {
                 if (error) {
@@ -21,9 +22,9 @@ const authController = (model) => {
             })
             .then(() => {
                 res.status(200)
-                res.send("Success!")
+                res.send({message: "Success"})
             })
-            .catch(error => res.status(error.code).send(error))
+            .catch(error => res.status(error.statusCode).send(error))
     }
 
     controller.login = (req, res, next) => {
