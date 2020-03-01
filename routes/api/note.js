@@ -9,7 +9,7 @@ const factory = (controller) => {
     router.get('/', controller.getNotes)
     router.post('/', controller.saveNote)
     router.post('/complete', controller.setNoteCompleted)
-    router.post('/delete', controller.deleteNoteById)
+    router.delete('/', controller.deleteNoteById)
 
     return router
 }

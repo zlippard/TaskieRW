@@ -41,7 +41,7 @@ const authController = (model) => {
                 }
             })
             .then(token => res.json({token: token}))
-            .catch(error => res.status(error.code).send(error))
+            .catch(error => res.status(error.statusCode).send(error))
     }
 
     return controller

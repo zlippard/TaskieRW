@@ -44,7 +44,7 @@ const noteController = (noteModel) => {
                 res.status(200)
                 res.json(trimmedNotes)
             })
-            .catch(error => res.status(error.code).send(error))
+            .catch(error => res.status(error.statusCode).send(error))
     }
 
     controller.saveNote = (req, res, next) => {
@@ -79,7 +79,7 @@ const noteController = (noteModel) => {
                     taskPriority: savedNote.taskPriority
                 })
             })
-            .catch(error => res.status(error.code).send(error))
+            .catch(error => res.status(error.statusCode).send(error))
     }
 
     controller.deleteNoteById = (req, res, next) => {
@@ -100,7 +100,7 @@ const noteController = (noteModel) => {
                 res.status(200)
                 res.json({message: 'Note deleted!'})
             })
-            .catch(error => res.status(error.code).send(error))
+            .catch(error => res.status(error.statusCode).send(error))
     }
 
     controller.setNoteCompleted = (req, res, next) => {
@@ -116,7 +116,7 @@ const noteController = (noteModel) => {
                 res.status(200)
                 res.json({message: "Success"})
             })
-            .catch(error => res.status(error.code).send(error))
+            .catch(error => res.status(error.statusCode).send(error))
     }
 
     return controller

@@ -10,7 +10,7 @@ const userController = (userModel) => {
                 email: user.email,
                 name: user.name
             }))
-            .catch(error => res.status(error.code).send(error))
+            .catch(error => res.status(error.statusCode).send(error))
     }
 
     return controller
