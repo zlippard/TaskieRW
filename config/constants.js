@@ -4,7 +4,7 @@ const constants = {
     },
     envKeys: {
         port: 'PORT',
-        databaseUrl: 'MONGODB_URI',
+        databaseUrl: 'DB_URI',
         verificationSecret: 'VERIFICATION_SECRET',
         tokenSecret: 'TOKEN_SECRET',
         baseUrl: 'BASE_URL'
